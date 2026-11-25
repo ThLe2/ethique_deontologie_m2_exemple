@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Exemple commenté — Une réclamation qui tourne mal</title>
+<style>
+:root{--prune:#8C1E70;--prune-fonce:#5E1349;--prune-clair:#F4E6EE;--accent:#C77BAA;
+ --vert:#283C28;--gris:#3C3C3C;--gris-moyen:#8A7A85;--filet:#E8DCE5;--creme:#FAF6F8;
+ --ok:#2F7A4F;--ko:#B23B3B;--amb:#B5852A;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--creme);color:var(--gris);
+ font-family:"Nunito","Segoe UI",Helvetica,Arial,sans-serif;font-size:16px;line-height:1.62}
+.wrap{max-width:900px;margin:0 auto;padding:0 18px 60px}
+header.bandeau{background:var(--prune-fonce);color:#fff;padding:18px 0;border-bottom:4px solid var(--accent)}
+header.bandeau .wrap{padding-bottom:0}
+.chapitre{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#EAD3E3}
+.chapitre span{color:var(--accent);margin:0 6px}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:27px;line-height:1.25;margin:8px 0 4px;color:#fff}
+.sous{color:#EAD3E3;font-size:14.5px;margin:0}
+h2{font-family:Georgia,"Times New Roman",serif;font-size:20px;color:var(--prune-fonce);
+ margin:34px 0 0;padding-bottom:8px;border-bottom:2px solid var(--filet)}
+h2 .num{color:var(--accent);margin-right:8px}
+h3{font-size:15px;color:var(--vert);margin:20px 0 8px;letter-spacing:.02em}
+.carte{background:#fff;border:1px solid var(--filet);border-radius:10px;padding:20px 22px;margin:18px 0;
+ box-shadow:0 1px 2px rgba(94,19,73,.05)}
+.enc{background:var(--prune-clair);border-left:5px solid var(--prune);padding:14px 18px;
+ border-radius:0 8px 8px 0;margin:18px 0;font-size:15.2px}
+.enc .t{display:block;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;
+ font-weight:800;color:var(--prune-fonce);margin-bottom:6px}
+.enc.al{background:#FBF4F4;border-left-color:var(--ko)}.enc.al .t{color:var(--ko)}
+.enc.ci{background:#FCF8F0;border-left-color:var(--amb)}.enc.ci .t{color:#8A6418}
+.situ{background:#FCF9FB;border:1px dashed var(--filet);border-radius:8px;padding:16px 18px;margin:16px 0;font-size:15.2px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.duo>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:15px 17px;font-size:14.8px}
+.duo .h{font-weight:800;color:var(--prune-fonce);margin-bottom:7px;font-size:14.5px}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.tri>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:14px 15px;font-size:14.3px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.quad>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:12px 13px;font-size:13.6px}
+.quad .h{font-weight:800;color:var(--prune-fonce);margin-bottom:6px;font-size:13px;
+ text-transform:uppercase;letter-spacing:.04em}
+.tri .h{font-weight:800;color:var(--prune-fonce);margin-bottom:6px;font-size:13.5px;
+ text-transform:uppercase;letter-spacing:.05em}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.8px;background:#fff}
+th,td{border:1px solid var(--filet);padding:9px 12px;text-align:left}
+thead th{background:var(--prune-clair);color:var(--prune-fonce);font-size:13.5px}
+tbody th{font-weight:600;color:var(--gris)}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.tot td,tr.tot th{background:#FBF3F8;font-weight:800;color:var(--prune-fonce)}
+.dl{display:inline-flex;align-items:center;gap:9px;background:var(--prune);color:#fff;text-decoration:none;
+ padding:11px 20px;border-radius:8px;font-weight:700;font-size:15px;margin:20px 0 4px}
+.dl:hover{background:var(--prune-fonce)}
+ol.q{padding-left:0;list-style:none;counter-reset:q}
+ol.q>li{margin:16px 0;padding-left:38px;position:relative}
+ol.q>li::before{counter-increment:q;content:counter(q);position:absolute;left:0;top:1px;
+ width:26px;height:26px;border-radius:50%;background:var(--prune-clair);color:var(--prune-fonce);
+ font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+b,strong{color:var(--vert)}
+footer{text-align:center;font-size:12.5px;color:var(--gris-moyen);padding:26px 18px 12px;
+ border-top:1px solid var(--filet);margin-top:44px}
+@media(max-width:860px){.quad{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.duo,.tri,.quad{grid-template-columns:1fr}h1{font-size:22px}}
+@media print{body{background:#fff}.dl{display:none}header.bandeau{background:#5E1349 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+.mail{background:#fff;border:1px solid var(--filet);border-radius:10px;padding:0;margin:16px 0;overflow:hidden}
+.mail .ent{background:#F7F1F5;border-bottom:1px solid var(--filet);padding:10px 16px;font-size:14px}
+.mail .ent b{color:var(--prune-fonce)}
+.mail .txt{padding:14px 18px;font-size:15.2px}
+.mail p{margin:0 0 10px}
+.err{background:#FDECEC;border-bottom:2px solid var(--ko);padding:0 2px;border-radius:3px}
+.cor{display:none;background:#E9F6EE;border-bottom:2px solid var(--ok);padding:0 2px;border-radius:3px;color:var(--ok);font-weight:700}
+.nf{font-size:11px;vertical-align:super;font-weight:800;color:var(--ko)}
+body.vu .err{text-decoration:line-through;background:none;border:0;color:var(--gris-moyen)}
+body.vu .cor{display:inline}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--prune);color:#fff;border:0;
+ padding:12px 22px;border-radius:8px;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer}
+.btn:hover{background:var(--prune-fonce)}
+.liste{display:none}body.vu .liste{display:block}
+</style></head>
+<body>
+<header class="bandeau"><div class="wrap">
+ <div class="chapitre">Éthique et déontologie <span>/</span> Module 2</div><h1>Une réclamation qui tourne mal</h1><p class="sous">Exemple commenté — La déontologie vis-à-vis du client</p>
+</div></header>
+<div class="wrap">
+
+<h2><span class="num">1 ·</span>La situation</h2>
+<div class="carte">
+<p>Sophie Marchal est conseillère en agence bancaire. M. Leroy, 47 ans, au chômage depuis six mois, découvert permanent, vient contester 96 € de frais d'incidents prélevés le mois dernier. Il est tendu. Lisez la façon dont Sophie traite sa demande, repérez les six phrases à corriger, puis affichez la correction.</p>
+<div class="mail">
+ <div class="ent"><b>À l'accueil — propos de Sophie Marchal</b></div>
+ <div class="txt"><p>« Bonjour Monsieur Leroy, que puis-je faire pour vous ? »</p><p>« <span class="err">Ce n'est pas une réclamation, c'est juste une question sur des frais : je ne l'enregistre pas.</span> <span class="cor">Vous contestez ces frais : c'est une réclamation, je l'enregistre tout de suite, même si nous la réglons aujourd'hui.</span><span class="nf">1</span> »</p><p>« <span class="err">De toute façon, avec vos incidents, vous êtes classé client à risque dans notre outil.</span> <span class="cor">Je vois que votre compte connaît des difficultés depuis plusieurs mois ; je vais vérifier si vous pouvez bénéficier de dispositions adaptées.</span><span class="nf">2</span> »</p><p>« <span class="err">Je vous propose plutôt notre assurance perte d'emploi et une carte premium, ça vous aidera.</span> <span class="cor">Il existe une offre adaptée aux clients en difficulté, à trois euros par mois au plus, avec des frais d'incidents plafonnés : je vous la présente.</span><span class="nf">3</span> »</p><p>« <span class="err">On vous répondra quand le service aura le temps, ça peut prendre trois ou quatre mois.</span> <span class="cor">Vous recevrez un accusé de réception sous dix jours ouvrables et une réponse écrite dans un délai de deux mois au plus.</span><span class="nf">4</span> »</p><p>« <span class="err">J'ai noté dans votre dossier : “client agressif, sans doute dépressif”.</span> <span class="cor">J'ai noté l'objet de votre réclamation et les frais contestés.</span><span class="nf">5</span> »</p><p>« <span class="err">Et si ça ne vous plaît pas, il n'y a pas d'autre recours, allez voir ailleurs.</span> <span class="cor">Si notre réponse ne vous satisfait pas, vous pourrez saisir gratuitement le médiateur bancaire, dont je vous donne les coordonnées.</span><span class="nf">6</span> »</p></div>
+</div>
+<button class="btn" id="voir" onclick="document.body.classList.add('vu');this.style.display='none'">Afficher la correction</button>
+</div>
+
+<div class="liste">
+<h2><span class="num">2 ·</span>Les corrections, une par une</h2>
+<div class="carte">
+<table><thead><tr><th>N°</th><th>Point</th><th>Le raisonnement</th></tr></thead><tbody><tr><td><b>1</b></td><td>La réclamation non reconnue</td><td>Toute expression d'un <b>mécontentement</b> envers le professionnel est une réclamation, quel que soit le canal. Elle s'enregistre, même réglée sur-le-champ (recommandation ACPR 2022-R-01).</td></tr><tr><td><b>2</b></td><td>L'étiquette au lieu de la détection</td><td>Des incidents répétés depuis plusieurs mois sont un <b>critère réglementaire de fragilité financière</b> (art. R. 312-4-3 CMF). La conseillère doit déclencher le dispositif, pas stigmatiser.</td></tr><tr><td><b>3</b></td><td>La vente contraire à l'intérêt du client</td><td>Proposer des produits payants à un client fragile, c'est faire passer l'objectif commercial avant son intérêt. La réglementation impose de lui proposer l'<b>offre spécifique</b> (3 € par mois au plus, frais d'incidents plafonnés).</td></tr><tr><td><b>4</b></td><td>Les délais inventés</td><td><b>Accusé de réception sous 10 jours ouvrables</b>, <b>réponse sous 2 mois</b> au plus à compter de l'envoi de la réclamation : ce sont les délais de l'ACPR.</td></tr><tr><td><b>5</b></td><td>Le commentaire interdit</td><td>Une appréciation subjective et une supposition sur la <b>santé</b> n'ont rien à faire dans le dossier : principe de minimisation et donnée sensible (art. 5 et 9 du RGPD). Le client peut en demander communication.</td></tr><tr><td><b>6</b></td><td>Le recours caché</td><td>Le client doit être informé de la <b>voie de recours à la médiation</b>, gratuite, après une réclamation écrite. Lui dire qu'il n'y a pas de recours est faux.</td></tr></tbody></table>
+</div>
+
+<h2><span class="num">3 ·</span>Ce qu'il faut en retenir</h2>
+<div class="carte"><div class="enc"><span class="t">CE QUE CET ÉCHANGE MONTRE</span>Sophie voulait clore vite. Elle a ignoré une réclamation, raté une situation de fragilité, tenté une vente inadaptée, donné des délais faux, écrit un commentaire illicite et caché le médiateur.</div><div class="enc al"><span class="t">CE QU'ELLE RISQUE</span>Une réclamation aggravée, une saisine du médiateur qui donnera raison au client, une sanction de l'établissement par l'ACPR et la CNIL, et des sanctions disciplinaires.</div><div class="enc ci"><span class="t">LA RÈGLE OPÉRATIONNELLE</span>Écouter, enregistrer, détecter la fragilité, proposer ce qui protège le client, annoncer les délais et le médiateur.</div>
+</div>
+</div>
+
+<footer>TMK Performances - N° Siret : 49841924100027 - Code NAF : 8559A</footer>
+</div>
+</body></html>
